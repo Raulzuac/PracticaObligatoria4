@@ -38,6 +38,10 @@ public class Usuario {
         }
         return false;
     }
+    public boolean loginCorrecto(String user,String pas){
+        return this.user.equals(user) && this.pass.equals(pass);
+
+    }
 
 
 }

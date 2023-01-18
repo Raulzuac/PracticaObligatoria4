@@ -37,5 +37,8 @@ public class Propietario {
     public String getNombre() {
         return this.nombre;
     }
+    public boolean loginCorrecto(String user,String pass){
+        return this.user.equals(user) && this.pass.equals(pass);
+    }
 }
 
