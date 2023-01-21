@@ -20,7 +20,6 @@ public class Usuario {
         this.pass = pass;
         this.token=token;
     }
-
     public String getid() {
         return this.id;
     }
@@ -30,6 +29,9 @@ public class Usuario {
     }
     public String getnombre() {
         return this.nombre;
+    }
+    public boolean verificado(){
+        return this.token==null;
     }
     public boolean verificarUsuario(String token) {
         if (token.equals(this.token)){
@@ -42,6 +44,26 @@ public class Usuario {
         return this.user.equals(user) && this.pass.equals(pass);
 
     }
+    public boolean claveCorrecta(String pass){return pass.equals(this.pass);}
+    @Override
+    public String toString() {
+        return String.format("""
+                ====================
+                      Usuario       
+                ====================
+                Nmobre: %s
+                Usuario: %s
+                DNI: %s
+                E-Mail: %s
+                Verificado: %s
+                ====================
+                """,this.nombre,this.user,this.DNI,this.email,(this.token==null)?"Si":"No");
+    }
 
-
+    public void modificar(String nombre, String user, String pass, String mail) {
+        if (!nombre.equals(""))this.nombre=nombre;
+        if (!user.equals(""))this.user=user;
+        if (!pass.equals(""))this.pass=pass;
+        if (!mail.equals(""))this.email=mail;
+    }
 }

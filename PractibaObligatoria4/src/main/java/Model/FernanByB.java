@@ -37,6 +37,14 @@ public class FernanByB {
         if (usuario2!=null)usuarios=usuarios+"2";
         return usuarios;
     }
+    public String reservasSistema(){
+        String reservas="";
+        if (reserva1!=null)reservas=reservas+"1";
+        if (reserva2!=null)reservas=reservas+"2";
+        if (reserva3!=null)reservas=reservas+"3";
+        if (reserva4!=null)reservas=reservas+"4";
+        return reservas;
+    }
     public boolean propietariosLlenos(){
         return propietario1!=null && propietario2!=null;
     }
@@ -147,6 +155,10 @@ public class FernanByB {
     public Vivienda getVivienda2() {
         return vivienda2;
     }
+    public Vivienda getViviendaByPropietarioId(String id){
+        if (id.equals(propietario1.getid()))return vivienda1;
+        return vivienda2;
+    }
 
     public Usuario getUsuario1() {
         return usuario1;
@@ -154,5 +166,43 @@ public class FernanByB {
 
     public Usuario getUsuario2() {
         return usuario2;
+    }
+
+    public Reserva getReserva1() {
+        return reserva1;
+    }
+
+    public Reserva getReserva2() {
+        return reserva2;
+    }
+
+    public Reserva getReserva3() {
+        return reserva3;
+    }
+
+    public Reserva getReserva4() {
+        return reserva4;
+    }
+
+    public Object getPersonaById(String id) {
+        if (usuario1!=null && usuario1.getid().equals(id))return usuario1;
+        if (usuario2!=null && usuario2.getid().equals(id))return usuario2;
+        if (propietario1!=null && propietario1.getid().equals(id))return propietario1;
+        if (propietario2!=null && propietario2.getid().equals(id))return propietario2;
+        if (admin!=null && admin.getid().equals(id))return admin;
+        return null;
+    }
+
+    public boolean claveCorrecta(String id, String pass) {
+        if (getAdminById(id)!=null)return getAdminById(id).claveCorrecta(pass);
+        if (getPropietarioById(id)!=null)return getPropietarioById(id).claveCorrecta(pass);
+        if (getUsuarioById(id)!=null)return getUsuarioById(id).claveCorrecta(pass);
+        return false;
+    }
+
+    public void modificausuario(String nombre, String user, String pass, String mail,String id) {
+        if (getAdminById(id)!=null)getAdminById(id).modificar(nombre,user,pass,mail);
+        if (getPropietarioById(id)!=null)getPropietarioById(id).modificar(nombre,user,pass,mail);
+        if (getUsuarioById(id)!=null)getUsuarioById(id).modificar(nombre,user,pass,mail);
     }
 }

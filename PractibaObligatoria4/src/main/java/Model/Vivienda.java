@@ -18,5 +18,18 @@ public class Vivienda {
         this.precioNoche = precioNoche;
         this.maxHuespedes = maxHuespedes;
     }
+    public Reserva getReserva1(){
+        return reserva1;
+    }
+
+    public Reserva getReserva2() {
+        return reserva2;
+    }
+    public String getReservas(){
+        String reservas="";
+        if (reserva1!=null)reservas=reservas+"1";
+        if (reserva2!=null)reservas=reservas+"2";
+        return reservas;
+    }
 }
 

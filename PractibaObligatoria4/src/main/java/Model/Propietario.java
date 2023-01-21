@@ -26,6 +26,11 @@ public class Propietario {
         }
         return false;
     }
+
+    public Vivienda getVivienda() {
+        return vivienda;
+    }
+
     public String getid() {
         return this.id;
     }
@@ -37,8 +42,33 @@ public class Propietario {
     public String getNombre() {
         return this.nombre;
     }
+    public boolean verificado(){
+        return this.token==null;
+    }
     public boolean loginCorrecto(String user,String pass){
         return this.user.equals(user) && this.pass.equals(pass);
+    }
+    public boolean claveCorrecta(String pass){return pass.equals(this.pass);}
+    @Override
+    public String toString() {
+        return String.format("""
+                ====================
+                    Propietario     
+                ====================
+                Nmobre: %s
+                Usuario: %s
+                DNI: %s
+                E-Mail: %s
+                Verificado: %s
+                ====================
+                """,this.nombre,this.user,this.DNI,this.email,(this.token==null)?"Si":"No");
+    }
+
+    public void modificar(String nombre, String user, String pass, String mail) {
+        if (!nombre.equals(""))this.nombre=nombre;
+        if (!user.equals(""))this.user=user;
+        if (!pass.equals(""))this.pass=pass;
+        if (!mail.equals(""))this.email=mail;
     }
 }
 

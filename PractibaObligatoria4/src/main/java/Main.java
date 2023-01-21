@@ -17,7 +17,7 @@ public class Main {
     public static String usuarioLogueado = "";
 
     public static void main(String[] args) {
-        crearUsuario("12345678F","zucaarraul@gmail.com","raul","rz","pass");
+        crearUsuario("12345678F", "zucaarraul@gmail.com", "raul", "rz", "pass");
         String opt = "";
         while (opt != "salir") {
             pintaMenu();
@@ -31,39 +31,38 @@ public class Main {
                     default -> System.out.println("Has introducido un valor incorrecto");
                 }
             } else switch (usuarioLogueado.charAt(0)) {
-                case '1' :{
-                    switch (opt){
-                        case "1"-> viviendasEnAlquiler();
-                        case "2"-> usuariosSistema();
-                        case "3"-> System.out.println("Ver todas las reservas de viviendas");
-                        case "4"-> System.out.println("Ver mi perfil");
-                        case "5"-> System.out.println("Modificar mi perfil");
-                        case "6"-> System.out.println("Cerrar sesion");
+                case '1': {
+                    switch (opt) {
+                        case "1" -> viviendasEnAlquiler();
+                        case "2" -> usuariosSistema();
+                        case "3" -> pintaPersona();
+                        case "5" -> modificarUsuario();
+                        case "6" -> usuarioLogueado="";
                         default -> System.out.println("Has introducido un valor incorrecto");
                     }
                     break;
                 }
-                case '2' :{
-                    switch (opt){
-                        case "1"-> System.out.println("Ver mis viviendas en alquiler");
-                        case "2"-> System.out.println("Crear/Editar mis viviendas");
-                        case "3"-> System.out.println("Ver las reservas de mis viviendas");
-                        case "4"-> System.out.println("Establecer un periodo no disponible en una vivienda");
-                        case "5"-> System.out.println("Ver mi perfil");
-                        case "6"-> System.out.println("Modificar mi perfil");
-                        case "7"-> System.out.println("Cerrar sesion");
+                case '2': {
+                    switch (opt) {
+                        case "1" -> verViviendasPropietario();
+                        case "2" -> System.out.println("Crear/Editar mis viviendas");
+                        case "3" -> verReservasMiVivienda();
+                        case "4" -> System.out.println("Establecer un periodo no disponible en una vivienda");
+                        case "5" -> pintaPersona();
+                        case "6" -> modificarUsuario();
+                        case "7" -> usuarioLogueado="";
                         default -> System.out.println("Has introducido un valor incorrecto");
                     }
                     break;
                 }
-                case '3' :{
-                    switch (opt){
-                        case "1"-> System.out.println("Busqueda de alojamientos");
-                        case "2"-> System.out.println("Ver mis reservas");
-                        case "3"-> System.out.println("Modificar mis reservas");
-                        case "4"-> System.out.println("Ver mi perfil");
-                        case "5"-> System.out.println("Modificar mi perfil");
-                        case "6"-> System.out.println("Cerrar sesion");
+                case '3': {
+                    switch (opt) {
+                        case "1" -> System.out.println("Busqueda de alojamientos");
+                        case "2" -> System.out.println("Ver mis reservas");
+                        case "3" -> System.out.println("Modificar mis reservas");
+                        case "4" -> pintaPersona();
+                        case "5" -> modificarUsuario();
+                        case "6" -> usuarioLogueado="";
                         default -> System.out.println("Has introducido un valor incorrecto");
                     }
                     break;
@@ -72,81 +71,134 @@ public class Main {
 
         }
     }
-    public static void registroUsuario(){
+
+    private static void modificarUsuario() {
+        System.out.println("Vienvenido al menú de modificación de  usuario, estos son tus datos:");
+        System.out.println(fernan.getPersonaById(usuarioLogueado));
+        System.out.println("A continuación tendrás que ir introduciendo los parámetros que deseas cambiar, si no quieres cambiar alguno dejalo en blanco):");
+        System.out.print("Nuevo nombre: ");
+        String nombre=s.nextLine();
+        System.out.println("Nuevo usuario: ");
+        String user=s.nextLine();
+        System.out.println("Nueva contraseña");
+        String pass=s.nextLine();
+        if (pass!=""){
+            System.out.println("Para cambiar tu contraseña, primero tienes que cambiar tu contraseña anterior:");
+            System.out.print("Tu contraseña anterior: ");
+            if (!fernan.claveCorrecta(usuarioLogueado,pass)){
+                System.out.println("Ha habido un error al comprobar la clave");
+                pass="";
+            }
+        }
+        System.out.println("Nuevo correo");
+        String mail=s.nextLine();
+        if (!validaEmail(mail)) {
+            System.out.println("El email insertado es incorrecto");
+            mail = "";
+        }
+        fernan.modificausuario(nombre,user,pass,mail,usuarioLogueado);
+        System.out.println("Su usuario ha sido modificado correctamente");
+        continuar();
+    }
+
+    private static void verReservasMiVivienda() {
+        pintaReservasVivienda(fernan.getPropietarioById(usuarioLogueado).getVivienda().getReservas());
+    }
+
+    private static void pintaReservasVivienda(String reservas) {
+        if (reservas.length()==1) System.out.println(reservas.equals("1")?fernan.getPropietarioById(usuarioLogueado).getVivienda().getReserva1():fernan.getPropietarioById(usuarioLogueado).getVivienda().getReserva2());
+        else {
+            System.out.println(fernan.getPropietarioById(usuarioLogueado).getVivienda().getReserva1());
+            System.out.println(fernan.getPropietarioById(usuarioLogueado).getVivienda().getReserva2());
+        }
+    }
+
+    private static void verViviendasPropietario() {
+        System.out.println(fernan.getViviendaByPropietarioId(usuarioLogueado));
+    }
+
+    public static void registroUsuario() {
         if (fernan.usuariosLlenos()) System.out.println("No se puede crear un usuario porque se ha alcanzado el maxmo");
         else {
             System.out.println("Menu de creación de usuario, inserta los campos segun se van pidiendo");
             System.out.print("Nombre: ");
-            String nombre=s.nextLine();
+            String nombre = s.nextLine();
             System.out.print("Usuario: ");
-            String usuario=s.nextLine();
+            String usuario = s.nextLine();
             System.out.print("Clave: ");
-            String pass=s.nextLine();
+            String pass = s.nextLine();
             System.out.print("DNI: ");
-            String dni=s.nextLine();
+            String dni = s.nextLine();
             System.out.println("E-Mail: ");
-            String mail=s.nextLine();
-            System.out.println(crearUsuario(dni,mail,nombre,usuario,pass)?"Usuario creado.":"No se ha podido crear el usuario.");
+            String mail = s.nextLine();
+            System.out.println(crearUsuario(dni, mail, nombre, usuario, pass) ? "Usuario creado." : "No se ha podido crear el usuario.");
         }
         continuar();
     }
-    public static void registroPropietario(){
-        if (fernan.propietariosLlenos()) System.out.println("No se puede crear un propietario porque se ha alcanzado el naximo.");
+
+    public static void registroPropietario() {
+        if (fernan.propietariosLlenos())
+            System.out.println("No se puede crear un propietario porque se ha alcanzado el naximo.");
         else {
             System.out.println("Menu de creacion de propietario, inserta los campos segun se van pidiendo");
             System.out.print("Nombre: ");
-            String nombre=s.nextLine();
+            String nombre = s.nextLine();
             System.out.print("Usuario: ");
-            String usuario=s.nextLine();
+            String usuario = s.nextLine();
             System.out.print("Clave: ");
-            String pass=s.nextLine();
+            String pass = s.nextLine();
             System.out.print("DNI: ");
-            String dni=s.nextLine();
+            String dni = s.nextLine();
             System.out.println("E-Mail: ");
-            String mail=s.nextLine();
-            System.out.println(crearPropietario(dni,mail,nombre,usuario,pass)?"Propietario creado.":"No se ha podido crear el propietario");
+            String mail = s.nextLine();
+            System.out.println(crearPropietario(dni, mail, nombre, usuario, pass) ? "Propietario creado." : "No se ha podido crear el propietario");
         }
         continuar();
     }
-    public static void registroAdmin(){
-    if (fernan.adminLleno()) System.out.println("No se puede crear un admin porque se ha llegado al número máximo");
-    else{
-        System.out.println("Para crear un administrador primero tienes que insertar la clave correspondiente");
-        if (!s.nextLine().equals(claveAdmin)) System.out.println("Contraseña incorrecta.");
+
+    public static void registroAdmin() {
+        if (fernan.adminLleno()) System.out.println("No se puede crear un admin porque se ha llegado al número máximo");
         else {
-            System.out.println("Menu de creación de admin, inserta los campos según se piden");
-            System.out.print("Nombre: ");
-            String nombre=s.nextLine();
-            System.out.print("Usuario: ");
-            String usuario=s.nextLine();
-            System.out.print("Clave: ");
-            String pass=s.nextLine();
-            System.out.print("DNI: ");
-            String dni=s.nextLine();
-            System.out.println("E-Mail: ");
-            String mail=s.nextLine();
-            System.out.println(crearAdmin(dni,mail,nombre,usuario,pass)?"Admin creado":"No se ha podido crear el admin");
+            System.out.println("Para crear un administrador primero tienes que insertar la clave correspondiente");
+            if (!s.nextLine().equals(claveAdmin)) System.out.println("Contraseña incorrecta.");
+            else {
+                System.out.println("Menu de creación de admin, inserta los campos según se piden");
+                System.out.print("Nombre: ");
+                String nombre = s.nextLine();
+                System.out.print("Usuario: ");
+                String usuario = s.nextLine();
+                System.out.print("Clave: ");
+                String pass = s.nextLine();
+                System.out.print("DNI: ");
+                String dni = s.nextLine();
+                System.out.println("E-Mail: ");
+                String mail = s.nextLine();
+                System.out.println(crearAdmin(dni, mail, nombre, usuario, pass) ? "Admin creado" : "No se ha podido crear el admin");
+            }
+            continuar();
         }
-        continuar();
     }
-    }
-    public static void login(){
+
+    public static void login() {
         System.out.println("Inserta el usuario con el que quiere loguearte");
-        String user=s.nextLine();
+        String user = s.nextLine();
         System.out.println("Ahora inserta la contraseña con la que quieres loguearte");
-        String pass=s.nextLine();
-        usuarioLogueado=fernan.login(user,pass);
+        String pass = s.nextLine();
+        usuarioLogueado = fernan.login(user, pass);
         if (usuarioLogueado.equals("")) System.out.println("Credenciales incorrectas.");
         else System.out.println("Te has logueado correctamente");
         continuar();
     }
-    public static void viviendasEnAlquiler(){
+
+    public static void viviendasEnAlquiler() {
         pintarViviendas(fernan.viviendasEnAlquiler());
     }
-    public static void pintarViviendas(String viviendas){
-        if (viviendas.length()==0) System.out.println("No hay viviendas en el sistema");
+
+    public static void pintarViviendas(String viviendas) {
+        if (viviendas.length() == 0) System.out.println("No hay viviendas en el sistema");
         else {
-            if (viviendas.length()==1) System.out.println(viviendas.equals("1")?fernan.getVivienda1():fernan.getVivienda2());
+            if (viviendas.length() == 1)
+                System.out.println(viviendas.equals("1") ? fernan.getVivienda1() : fernan.getVivienda2());
             else {
                 System.out.println(fernan.getVivienda1());
                 System.out.println(fernan.getVivienda2());
@@ -154,20 +206,41 @@ public class Main {
         }
         continuar();
     }
-    public static void usuariosSistema(){
+
+    public static void usuariosSistema() {
         pintarUsuarios(fernan.usuariosSistema());
     }
-    public static void pintarUsuarios(String usuarios){
-        if (usuarios.length()==0) System.out.println("No hay ningun usuario en el sistema");
+
+    public static void pintarUsuarios(String usuarios) {
+        if (usuarios.length() == 0) System.out.println("No hay ningun usuario en el sistema");
         else {
-            if (usuarios.length()==1) System.out.println(usuarios.equals("1")?fernan.getUsuario1():fernan.getUsuario2());
-            else{
+            if (usuarios.length() == 1)
+                System.out.println(usuarios.equals("1") ? fernan.getUsuario1() : fernan.getUsuario2());
+            else {
                 System.out.println(fernan.getUsuario1());
                 System.out.println(fernan.getUsuario2());
             }
         }
         continuar();
     }
+    public static void reservasSistema(){
+        pintaReservas(fernan.reservasSistema());
+    }
+    public static void pintaReservas(String reservas) {
+        for (int i = 0; i < reservas.length(); i++) {
+            switch (reservas.charAt(0)) {
+                case 1 -> System.out.println(fernan.getReserva1());
+                case 2 -> System.out.println(fernan.getReserva2());
+                case 3 -> System.out.println(fernan.getReserva3());
+                case 4 -> System.out.println(fernan.getReserva4());
+            }
+            reservas=reservas.substring(1, reservas.length()-1);
+        }
+    }
+    public static void pintaPersona(){
+        System.out.println(fernan.getPersonaById(usuarioLogueado));
+    }
+
     public static void pintaMenu() {
         if (usuarioLogueado.equals("")) System.out.println("""
                 ==============================================
@@ -195,7 +268,7 @@ public class Main {
                          5.-Modificar mi perfil                       
                          6.-Cerrar sesión                          
                          ============================================                                           
-                        """,fernan.getAdminById(usuarioLogueado).getNombre());
+                        """, fernan.getAdminById(usuarioLogueado).getNombre());
                 case '2' -> System.out.printf("""
                         ================================================================
                                                                                       
@@ -211,7 +284,7 @@ public class Main {
                           7.-Cerrar sesión                                            
                                                                                       
                         ================================================================
-                        """,fernan.getPropietarioById(usuarioLogueado).getNombre());
+                        """, fernan.getPropietarioById(usuarioLogueado).getNombre());
                 case '3' -> System.out.printf("""
                         ==========================================
                                                                  
@@ -226,7 +299,7 @@ public class Main {
                           6.-Cerrar sesión                      
                                                                   
                         ==========================================
-                        """,fernan.getUsuarioById(usuarioLogueado).getnombre());
+                        """, fernan.getUsuarioById(usuarioLogueado).getnombre());
             }
         }
     }
