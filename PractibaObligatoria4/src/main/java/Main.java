@@ -4,6 +4,7 @@ import Model.Usuario;
 import Model.Vivienda;
 import Utils.Comms;
 
+import javax.crypto.spec.PSource;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -33,6 +34,10 @@ public class Main {
             } else switch (usuarioLogueado.charAt(0)) {
                 case '1': {
                     switch (opt) {
+                        case "0" ->{
+                            if (fernan.getAdminById(usuarioLogueado).verificado()) System.out.println("Has introducido un valor incorrecto");
+                            else verificarUsuario(usuarioLogueado);
+                        }
                         case "1" -> viviendasEnAlquiler();
                         case "2" -> usuariosSistema();
                         case "3" -> pintaPersona();
@@ -44,6 +49,10 @@ public class Main {
                 }
                 case '2': {
                     switch (opt) {
+                        case "0" ->{
+                            if (fernan.getPropietarioById(usuarioLogueado).verificado()) System.out.println("Has introducido un valor incorrecto");
+                            else verificarUsuario(usuarioLogueado);
+                        }
                         case "1" -> verViviendasPropietario();
                         case "2" -> System.out.println("Crear/Editar mis viviendas");
                         case "3" -> verReservasMiVivienda();
@@ -57,6 +66,10 @@ public class Main {
                 }
                 case '3': {
                     switch (opt) {
+                        case "0" ->{
+                            if (fernan.getUsuarioById(usuarioLogueado).verificado()) System.out.println("Has introducido un valor incorrecto");
+                            else verificarUsuario(usuarioLogueado);
+                        }
                         case "1" -> System.out.println("Busqueda de alojamientos");
                         case "2" -> System.out.println("Ver mis reservas");
                         case "3" -> System.out.println("Modificar mis reservas");
@@ -129,7 +142,7 @@ public class Main {
             String pass = s.nextLine();
             System.out.print("DNI: ");
             String dni = s.nextLine();
-            System.out.println("E-Mail: ");
+            System.out.print("E-Mail: ");
             String mail = s.nextLine();
             System.out.println(crearUsuario(dni, mail, nombre, usuario, pass) ? "Usuario creado." : "No se ha podido crear el usuario.");
         }
@@ -149,7 +162,7 @@ public class Main {
             String pass = s.nextLine();
             System.out.print("DNI: ");
             String dni = s.nextLine();
-            System.out.println("E-Mail: ");
+            System.out.print("E-Mail: ");
             String mail = s.nextLine();
             System.out.println(crearPropietario(dni, mail, nombre, usuario, pass) ? "Propietario creado." : "No se ha podido crear el propietario");
         }
@@ -171,7 +184,7 @@ public class Main {
                 String pass = s.nextLine();
                 System.out.print("DNI: ");
                 String dni = s.nextLine();
-                System.out.println("E-Mail: ");
+                System.out.print("E-Mail: ");
                 String mail = s.nextLine();
                 System.out.println(crearAdmin(dni, mail, nombre, usuario, pass) ? "Admin creado" : "No se ha podido crear el admin");
             }
@@ -260,7 +273,7 @@ public class Main {
                                                                    
                          Menu de admin                             
                          Bienvenido: %s                            
-                        =============================================   
+                        =============================================%s
                          1.-Ver todas las viviendas en alquiler    
                          2.-Ver todos los usuarios del sistema        
                          3.-Ver todas las reservas de viviendas       
@@ -268,13 +281,13 @@ public class Main {
                          5.-Modificar mi perfil                       
                          6.-Cerrar sesión                          
                          ============================================                                           
-                        """, fernan.getAdminById(usuarioLogueado).getNombre());
+                        """, fernan.getAdminById(usuarioLogueado).getNombre(),fernan.getAdminById(usuarioLogueado).verificado()?"":"\n  0.-Verificar mi cuenta");
                 case '2' -> System.out.printf("""
                         ================================================================
                                                                                       
                           Menu de propietario                                         
                           Bienvenido: %s                                              
-                        ================================================================
+                        ================================================================%s
                           1.-Ver mis viviendas en alquiler                            
                           2.-Crear/Editar mis viviendas                               
                           3.-Ver las reservas de mis viviendas                        
@@ -284,13 +297,13 @@ public class Main {
                           7.-Cerrar sesión                                            
                                                                                       
                         ================================================================
-                        """, fernan.getPropietarioById(usuarioLogueado).getNombre());
+                        """,fernan.getPropietarioById(usuarioLogueado).getNombre(),fernan.getPropietarioById(usuarioLogueado).verificado()?"":"\n  0.-Verificar mi usuario");
                 case '3' -> System.out.printf("""
                         ==========================================
                                                                  
                           Menu de usuario                       
                           Bienvenido: %s                        
-                        ==========================================
+                        ==========================================%s
                           1.-Busqueda de alojamientos           
                           2.-Ver mis reservas                   
                           3.-Modificar mis reservas             
@@ -299,7 +312,7 @@ public class Main {
                           6.-Cerrar sesión                      
                                                                   
                         ==========================================
-                        """, fernan.getUsuarioById(usuarioLogueado).getnombre());
+                        """,fernan.getUsuarioById(usuarioLogueado).getnombre(),fernan.getUsuarioById(usuarioLogueado).verificado()?"":"\n  0.-Verificar mi usuario");
             }
         }
     }
