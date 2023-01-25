@@ -6,8 +6,6 @@ public class FernanByB {
     private Propietario propietario1;
     private Propietario propietario2;
     private Admin admin;
-    private Vivienda vivienda1;
-    private Vivienda vivienda2;
     private Reserva reserva1;
     private Reserva reserva2;
     private Reserva reserva3;
@@ -27,8 +25,8 @@ public class FernanByB {
      */
     public String viviendasEnAlquiler(){
         String viviendas="";
-        if (vivienda1!=null)viviendas=viviendas+"1";
-        if (vivienda2!=null)viviendas=viviendas+"2";
+        if (propietario1.getVivienda()!=null)viviendas=viviendas+"1";
+        if (propietario2.getVivienda()!=null)viviendas=viviendas+"2";
         return viviendas;
     }
     public String usuariosSistema(){
@@ -44,6 +42,12 @@ public class FernanByB {
         if (reserva3!=null)reservas=reservas+"3";
         if (reserva4!=null)reservas=reservas+"4";
         return reservas;
+    }
+    public void nuevaVivienda(String id,String nombre,String localidad,String calle,String numero,double precioNoche,int huespedes){
+          getPropietarioById(id).setVivienda(new Vivienda(nombre,new Direccion(localidad,calle,numero),precioNoche,huespedes));
+    }
+    public void editarVivienda(String id,String nombre,double precionoche,int huespedes){
+        getPropietarioById(id).getVivienda().editarVivienda(nombre,precionoche,huespedes);
     }
     public boolean propietariosLlenos(){
         return propietario1!=null && propietario2!=null;
@@ -149,15 +153,15 @@ public class FernanByB {
     }
 
     public Vivienda getVivienda1() {
-        return vivienda1;
+        return propietario1.getVivienda();
     }
 
     public Vivienda getVivienda2() {
-        return vivienda2;
+        return propietario2.getVivienda();
     }
     public Vivienda getViviendaByPropietarioId(String id){
-        if (id.equals(propietario1.getid()))return vivienda1;
-        return vivienda2;
+        if (id.equals(propietario1.getid()))return propietario1.getVivienda();
+        return propietario2.getVivienda();
     }
 
     public Usuario getUsuario1() {

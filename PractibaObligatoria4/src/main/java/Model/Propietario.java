@@ -28,6 +28,7 @@ public class Propietario {
     }
 
     public Vivienda getVivienda() {
+        if (this.vivienda==null)return null;
         return vivienda;
     }
 
@@ -42,6 +43,11 @@ public class Propietario {
     public String getNombre() {
         return this.nombre;
     }
+
+    public void setVivienda(Vivienda vivienda) {
+        this.vivienda = vivienda;
+    }
+
     public boolean verificado(){
         return this.token==null;
     }
@@ -70,5 +76,7 @@ public class Propietario {
         if (!pass.equals(""))this.pass=pass;
         if (!mail.equals(""))this.email=mail;
     }
+
+
 }
 

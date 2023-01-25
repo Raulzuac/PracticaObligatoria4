@@ -5,6 +5,7 @@ import Model.Vivienda;
 import Utils.Comms;
 
 import javax.crypto.spec.PSource;
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -41,6 +42,7 @@ public class Main {
                         case "1" -> viviendasEnAlquiler();
                         case "2" -> usuariosSistema();
                         case "3" -> pintaPersona();
+                        case "4" -> reservasSistema();
                         case "5" -> modificarUsuario();
                         case "6" -> usuarioLogueado="";
                         default -> System.out.println("Has introducido un valor incorrecto");
@@ -54,7 +56,7 @@ public class Main {
                             else verificarUsuario(usuarioLogueado);
                         }
                         case "1" -> verViviendasPropietario();
-                        case "2" -> System.out.println("Crear/Editar mis viviendas");
+                        case "2" -> creaEditaVivienda();
                         case "3" -> verReservasMiVivienda();
                         case "4" -> System.out.println("Establecer un periodo no disponible en una vivienda");
                         case "5" -> pintaPersona();
@@ -83,6 +85,77 @@ public class Main {
             }
 
         }
+    }
+
+    private static void creaEditaVivienda() {
+        if (fernan.getPropietarioById(usuarioLogueado).getVivienda()==null)crearVivienda();
+        else editarVivienda();
+    }
+
+    private static void editarVivienda() {
+        System.out.println("Bienvenido al menú de edición de vivienda");
+        System.out.println("¿Quieres cambiar la vivienda?(s/n)");
+        String nombre="";
+        if (s.nextLine().toLowerCase().charAt(0)=='s'){
+            System.out.println("Inserta el nuevo nombre de la vivienda");
+            nombre=s.nextLine();
+        }
+        double precioNoche=0;
+        System.out.println("¿Quieres cambiar el precio por noche de la vivienda?(s/n)");
+        if (s.nextLine().toLowerCase().charAt(0)=='s'){
+            System.out.println("Inserta el nuevo nombre de la vivienda");
+            do {
+                try{
+                    precioNoche=Double.parseDouble(s.nextLine());
+                }catch (NumberFormatException e){
+                    System.out.println("Por favor introduce un número");
+                }
+            }while (precioNoche==0);
+        }
+        int huespedes=0;
+        System.out.println("¿Quieres cambiar el número de huespedes de la vivienda?");
+        if (s.nextLine().toLowerCase().charAt(0)=='S'){
+            System.out.println("Inserta el nuevo nombre de la vivienda");
+            do {
+                try{
+                    huespedes=Integer.parseInt(s.nextLine());
+                }catch (NumberFormatException e){
+                    System.out.println("Por favor introduce un número");
+                }
+            }while (huespedes==0);
+        }
+        fernan.editarVivienda(usuarioLogueado,nombre,precioNoche,huespedes);
+    }
+
+    private static void crearVivienda() {
+        System.out.println("Bienvenido al menú de creación de vivienda");
+        System.out.print("Inserta el nombre de la vivienda:");
+        String nombre=s.nextLine();
+        System.out.println("Inserta la localidad de la vivienda");
+        String localidad=s.nextLine();
+        System.out.println("Inserta la calle de la vivineda");
+        String calle=s.nextLine();
+        System.out.println("Inserta el número de la vivienda");
+        String numero=s.nextLine();
+        System.out.println("Inserta el precio por noche de la vivienda");
+        double precioNoche=0;
+        do {
+            try{
+                precioNoche=Double.parseDouble(s.nextLine());
+            }catch (NumberFormatException e){
+                System.out.println("Introduce un valor válido");
+            }
+        }while (precioNoche==0);
+        System.out.println("Inserta el número de huespedes que admite la vivienda");
+        int huespedes=0;
+        do {
+            try{
+                huespedes=Integer.parseInt(s.nextLine());
+            }catch (NumberFormatException e){
+                System.out.println("Introduce un valor válido");
+            }
+        }while (huespedes==0);
+    fernan.nuevaVivienda(usuarioLogueado,nombre,localidad,calle,numero,precioNoche,huespedes);
     }
 
     private static void modificarUsuario() {
