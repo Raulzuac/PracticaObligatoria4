@@ -1,5 +1,9 @@
 package Model;
 
+import Utils.DateCalcs;
+
+import java.time.LocalDate;
+
 public class Vivienda {
     private String nombre;
     private String id;
@@ -36,6 +40,24 @@ public class Vivienda {
         if (!nombre.equals(""))this.nombre=nombre;
         if (precionoche!=0)this.precioNoche=precionoche;
         if (huespedes!=0)this.maxHuespedes=huespedes;
+    }
+    public boolean reservable(){
+        return reserva1==null || reserva2==null;
+    }
+    public boolean reservar(LocalDate fini,LocalDate ffin,String idreserva) {
+        if (reserva1 == null && reserva2 == null){
+            reserva1 = new Reserva(id, fini, ffin);
+            return true;
+        }
+        if (reserva1 == null && DateCalcs.noCoinciden(fini, reserva2.getFini(),ffin,reserva2.getFfin())){
+            reserva1=new Reserva(id,fini,ffin);
+            return true;
+        }
+        if (reserva2==null && DateCalcs.noCoinciden(fini, reserva1.getFini(),ffin,reserva1.getFfin())){
+            reserva2=new Reserva(id,fini,ffin);
+            return true;
+        }
+        return false;
     }
 }
 

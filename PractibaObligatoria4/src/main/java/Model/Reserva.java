@@ -12,5 +12,13 @@ public class Reserva {
         this.fini = fini;
         this.ffin = ffin;
     }
+
+    public LocalDate getFini() {
+        return fini;
+    }
+
+    public LocalDate getFfin() {
+        return ffin;
+    }
 }
 

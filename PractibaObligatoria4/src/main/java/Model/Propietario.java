@@ -1,5 +1,7 @@
 package Model;
 
+import java.time.LocalDate;
+
 public class Propietario {
     private String id;
     private String DNI;

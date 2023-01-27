@@ -1,5 +1,7 @@
 package Model;
 
+import java.time.LocalDate;
+
 public class FernanByB {
     private Usuario usuario1;
     private Usuario usuario2;
@@ -77,6 +79,7 @@ public class FernanByB {
     }
     public boolean creaPropietario(String dni, String mail, String user, String pass, String nombre,String token) {
         boolean propietarioCreado=false;
+
         if ((propietario1==null || !propietario1.getUser().equals(user)) && (propietario2==null || !propietario2.getUser().equals(user))){
             if (propietario1==null){
                 propietario1=new Propietario(generaIdPropietario(),dni,mail,nombre,user,pass,token);
@@ -120,6 +123,10 @@ public class FernanByB {
     public String generaIdAdmin(){
         String id="1"+(int)(Math.random()*10000);
         return id;
+    }
+    public String generaIdReserva(){
+        int idreserva=(int)(Math.random()*899999)+100000;
+        return String.valueOf(idreserva);
     }
     public String login(String user,String pass){
         if (usuario1!=null && usuario1.loginCorrecto(user,pass))return usuario1.getid();
@@ -208,5 +215,16 @@ public class FernanByB {
         if (getAdminById(id)!=null)getAdminById(id).modificar(nombre,user,pass,mail);
         if (getPropietarioById(id)!=null)getPropietarioById(id).modificar(nombre,user,pass,mail);
         if (getUsuarioById(id)!=null)getUsuarioById(id).modificar(nombre,user,pass,mail);
+    }
+    public boolean bloqueaVivienda(LocalDate fini, LocalDate ffin, Vivienda v){
+        return v.reservar(fini,ffin,generaIdReserva());
+    }
+    public boolean verificado(String id){
+        if (usuario1.getid().equals(id))return usuario1.verificado();
+        if (usuario2.getid().equals(id))return usuario2.verificado();
+        if (propietario1.getid().equals(id))return propietario1.verificado();
+        if (propietario2.getid().equals(id))return propietario2.verificado();
+        if (admin.getid().equals(id))return admin.verificado();
+        return false;
     }
 }

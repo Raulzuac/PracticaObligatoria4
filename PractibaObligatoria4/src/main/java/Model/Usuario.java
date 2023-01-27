@@ -9,7 +9,7 @@ public class Usuario {
     private String pass;
     private String token;
     private Reserva reserva1;
-    private Reserva resreva2;
+    private Reserva reserva2;
 
     public Usuario(String id, String DNI, String email, String user, String pass,String nombre,String token) {
         this.id = id;
@@ -30,6 +30,15 @@ public class Usuario {
     public String getnombre() {
         return this.nombre;
     }
+
+    public Reserva getReserva1() {
+        return reserva1;
+    }
+
+    public Reserva getReserva2() {
+        return reserva2;
+    }
+
     public boolean verificado(){
         return this.token==null;
     }
