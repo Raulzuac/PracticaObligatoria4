@@ -44,20 +44,45 @@ public class Vivienda {
     public boolean reservable(){
         return reserva1==null || reserva2==null;
     }
-    public boolean reservar(LocalDate fini,LocalDate ffin,String idreserva) {
+    public Reserva reservar(LocalDate fini,LocalDate ffin,String idreserva) {
         if (reserva1 == null && reserva2 == null){
             reserva1 = new Reserva(id, fini, ffin);
-            return true;
+            return reserva1;
         }
         if (reserva1 == null && DateCalcs.noCoinciden(fini, reserva2.getFini(),ffin,reserva2.getFfin())){
             reserva1=new Reserva(id,fini,ffin);
-            return true;
+            return reserva1;
         }
         if (reserva2==null && DateCalcs.noCoinciden(fini, reserva1.getFini(),ffin,reserva1.getFfin())){
             reserva2=new Reserva(id,fini,ffin);
-            return true;
+            return reserva2;
+        }
+        return null;
+    }
+    public Reserva getReservaById(String id){
+        if (reserva1.getId().equals(id))return reserva1;
+        if (reserva2.getId().equals(id))return reserva2;
+        return null;
+    }
+    public boolean borrarReservaById(String id){
+        if (reserva1.getId().equals(id)){
+            reserva1=null;
+        }
+        if (reserva2.getId().equals(id)){
+            reserva2=null;
         }
         return false;
+    }
+    public boolean hasResrva(String id){
+        if (reserva1.getId().equals(id))return true;
+        if (reserva2.getId().equals(id))return true;
+        return false;
+    }
+    public boolean reservableEn(LocalDate fini,LocalDate ffin){
+        return  (DateCalcs.noCoinciden(fini,reserva1.getFini(),ffin,reserva2.getFfin()) || DateCalcs.noCoinciden(fini,reserva2.getFini(),ffin,reserva2.getFini()));
+    }
+    public String getLocalidad(){
+        return direccion.getLocalidad();
     }
 }
 

@@ -9,6 +9,7 @@ import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +27,7 @@ public class Main {
             opt = s.nextLine();
             if (usuarioLogueado.equals("")) {
                 switch (opt) {
-                    case "1" -> usuarioLogueado=login(fernan, usuarioLogueado);
+                    case "1" -> usuarioLogueado = login(fernan, usuarioLogueado);
                     case "2" -> registroUsuario(fernan);
                     case "3" -> registroPropietario(fernan);
                     case "4" -> registroAdmin(fernan);
@@ -75,9 +76,9 @@ public class Main {
                                 System.out.println("Has introducido un valor incorrecto");
                             else verificarUsuario(fernan, usuarioLogueado);
                         }
-                        case "1" -> System.out.println("Busqueda de alojamientos");
-                        case "2" -> System.out.println("Ver mis reservas");
-                        case "3" -> System.out.println("Modificar mis reservas");
+                        case "1" -> buscaVivienda(fernan, usuarioLogueado);
+                        case "2" -> verReservasUsuario(fernan, usuarioLogueado);
+                        case "3" -> usuarioModificaReservas(fernan, usuarioLogueado);
                         case "4" -> pintaPersona(fernan, usuarioLogueado);
                         case "5" -> modificarUsuario(fernan, usuarioLogueado);
                         case "6" -> usuarioLogueado = "";
@@ -87,6 +88,101 @@ public class Main {
                 }
             }
 
+        }
+    }
+
+    private static void buscaVivienda(FernanByB fernan, String usuarioLogueado) {
+        if(fernan.getUsuarioById(usuarioLogueado).reservasLlenas()){
+            System.out.println("Lo sentimos, no puedes reservar porque tienes las reservas llenas");
+        }else {
+            LocalDate fini = null, ffin = null;
+            String localidad, viviendasEncontradas;
+            Vivienda v=null;
+            System.out.println("Vienvenido al menú de busqueda de vivienda de FernanB&B");
+            System.out.println("Introduce la fecha en la que iniciarías tu estancia (dd-mm-aaaa)");
+            do {
+                try {
+                    fini = LocalDate.parse(s.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                } catch (DateTimeException e) {
+                    System.out.println("Introduce la fecha en un formato correcto dd-mm-aaaa");
+                }
+            } while (fini == null);
+            System.out.println("Ahora introducec la fecha en la que acabará la estancia");
+            do {
+                try {
+                    ffin = LocalDate.parse(s.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                } catch (DateTimeException e) {
+                    System.out.println("Introduce la fecha en un formato correcto dd-mm-aaaa");
+                }
+            } while (ffin == null);
+            System.out.println("Inserta la localidad en la que quieres buscar alojamiento");
+            localidad = s.nextLine();
+            viviendasEncontradas = fernan.buscaVivienda(fini, ffin, localidad);
+            if (viviendasEncontradas.equals("")) {
+                System.out.println("No se ha encontrado ninguna vivienda que cumpla sus requisitos");
+                continuar();
+            } else {
+                if (viviendasEncontradas.length() == 1) {
+                    System.out.println("Las viviendas encontradas son: \n1:\n" + ((viviendasEncontradas.equals("1")) ? fernan.getVivienda1() : fernan.getVivienda2()) + "Itroduce el número de la vivienda correspondiente, cualquier otro para cancelar la reserva");
+                    if (!s.nextLine().equals("1")) {
+                        System.out.println("Cancelando la resrva.");
+                        continuar();
+                    } else v = (viviendasEncontradas.equals("1")) ? fernan.getVivienda1() : fernan.getVivienda2();
+                } else {
+                    System.out.println("Las viviendas encontradas son: \n1:\n"+ fernan.getVivienda1()+"\n2:\n"+fernan.getVivienda2());
+                    switch (s.nextLine()){
+                        case "1"->v=fernan.getVivienda1();
+                        case "2"->v=fernan.getVivienda2();
+                        default ->  {
+                            System.out.println("Cancelando la reserva");
+                            continuar();
+                        }
+                    }
+                }
+
+            }
+            if (v!=null){
+                System.out.println("Su vivienda ha sido reservada correctamente");
+                fernan.reservaVivienda(fini,ffin,v,usuarioLogueado);
+                continuar();
+            }
+        }
+    }
+
+    private static void usuarioModificaReservas(FernanByB fernan, String usuarioLogueado) {
+        Reserva r;
+        if (!fernan.getUsuarioById(usuarioLogueado).tieneReservas()) {
+            System.out.println("No tienes ninguna reserva que modificar");
+            continuar();
+        } else {
+            System.out.println("Estas son tus reservas: ");
+            if (fernan.getUsuarioById(usuarioLogueado).getReserva1() != null)
+                System.out.println(fernan.getUsuarioById(usuarioLogueado).getReserva1());
+            if (fernan.getUsuarioById(usuarioLogueado).getReserva2() != null)
+                System.out.println(fernan.getUsuarioById(usuarioLogueado).getReserva2());
+            System.out.println("Introduce el id de la reserva que quieres modificar.");
+            if ((r = fernan.getUsuarioById(usuarioLogueado).getReservaById(s.nextLine())) == null) {
+                System.out.println("Id incorrecto volviendo al menú de usuario");
+            } else {
+                //todo
+                System.out.println("¿Quieres borrar la reserva?");
+                if (!Character.toString(s.nextLine().charAt(0)).equalsIgnoreCase("s")) {
+                    System.out.println("Cancelando la modificación de reserva");
+                    continuar();
+                } else {
+                    fernan.borrarResrbaById(r.getId(), usuarioLogueado);
+                }
+            }
+        }
+    }
+
+    private static void verReservasUsuario(FernanByB fernan, String usuarioLogueado) {
+        if (fernan.getUsuarioById(usuarioLogueado).tieneReservas()) System.out.println("No tienes reservas");
+        else {
+            if (fernan.getUsuarioById(usuarioLogueado).getReserva1() != null)
+                System.out.println(fernan.getUsuarioById(usuarioLogueado).getReserva1());
+            if (fernan.getUsuarioById(usuarioLogueado).getReserva2() != null)
+                System.out.println(fernan.getUsuarioById(usuarioLogueado).getReserva2());
         }
     }
 
@@ -103,14 +199,14 @@ public class Main {
             }
         } while (fini == null);
         do {
-            try{
+            try {
                 System.out.print("Fecha de fin: ");
-                ffin=LocalDate.parse(s.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-            }catch (DateTimeException e){
+                ffin = LocalDate.parse(s.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            } catch (DateTimeException e) {
                 System.out.println("No has intoducido bien el fomrato de la fecha, (el correcto es dd-mm-yyyy)");
             }
         } while (ffin == null);
-        if (fernan.bloqueaVivienda(fini,ffin,fernan.getPropietarioById(usuarioLogueado).getVivienda()))
+        if (fernan.bloqueaVivienda(fini, ffin, fernan.getPropietarioById(usuarioLogueado).getVivienda()))
             System.out.println("La vivienda ha sido bloqueada correctamente");
         else System.out.println("La vivienda no ha podido ser bloqueada");
     }
@@ -345,7 +441,7 @@ public class Main {
     }
 
     public static void pintaReservas(String reservas, FernanByB fernan) {
-        for (int i = 0; i < reservas.length(); i++) {
+        for (int i = 0; i < reservas.length() - 1; i++) {
             switch (reservas.charAt(0)) {
                 case 1 -> System.out.println(fernan.getReserva1());
                 case 2 -> System.out.println(fernan.getReserva2());

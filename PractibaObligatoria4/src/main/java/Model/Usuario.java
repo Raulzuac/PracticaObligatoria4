@@ -75,4 +75,30 @@ public class Usuario {
         if (!pass.equals(""))this.pass=pass;
         if (!mail.equals(""))this.email=mail;
     }
+
+    public boolean tieneReservas() {
+        return reserva1==null && reserva2==null;
+    }
+    public Reserva getReservaById(String id){
+        if (reserva1.getId().equals(id))return reserva1;
+        if (reserva2.getId().equals(id))return reserva2;
+        return null;
+    }
+    public boolean borrarReservaById(String id){
+        if (reserva1.getId().equals(id)){
+            reserva1=null;
+        }
+        if (reserva2.getId().equals(id)){
+            reserva2=null;
+        }
+        return false;
+    }
+
+    public void setReserva(Reserva r) {
+        if (reserva1==null)reserva1=r;
+        if (reserva2==null)reserva2=r;
+    }
+    public boolean reservasLlenas(){
+        return reserva1!=null && reserva2!=null;
+    }
 }

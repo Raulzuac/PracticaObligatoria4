@@ -20,5 +20,9 @@ public class Reserva {
     public LocalDate getFfin() {
         return ffin;
     }
+
+    public String getId() {
+        return id;
+    }
 }
 
