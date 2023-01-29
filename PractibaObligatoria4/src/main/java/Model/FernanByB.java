@@ -1,6 +1,9 @@
 package Model;
 
+import Utils.Comms;
+
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class FernanByB {
     private Usuario usuario1;
@@ -29,8 +32,8 @@ public class FernanByB {
      */
     public String viviendasEnAlquiler() {
         String viviendas = "";
-        if (propietario1.getVivienda() != null) viviendas = viviendas + "1";
-        if (propietario2.getVivienda() != null) viviendas = viviendas + "2";
+        if (propietario1!=null && propietario1.getVivienda() != null) viviendas = viviendas + "1";
+        if (propietario2!=null && propietario2.getVivienda() != null) viviendas = viviendas + "2";
         return viviendas;
     }
 
@@ -43,15 +46,17 @@ public class FernanByB {
 
     public String reservasSistema() {
         String reservas = "";
-        if (reserva1 != null) reservas = reservas + "1";
-        if (reserva2 != null) reservas = reservas + "2";
-        if (reserva3 != null) reservas = reservas + "3";
-        if (reserva4 != null) reservas = reservas + "4";
+        if (propietario1!=null && propietario1.getVivienda().getReserva1()!=null)reservas=reservas.concat("1");
+        if (propietario1!=null && propietario1.getVivienda().getReserva2()!=null)reservas=reservas.concat("2");
+        if (propietario2!=null && propietario2.getVivienda().getReserva1()!=null)reservas=reservas.concat("3");
+        if (propietario2!=null && propietario2.getVivienda().getReserva2()!=null)reservas=reservas.concat("4");
         return reservas;
     }
 
     public void nuevaVivienda(String id, String nombre, String localidad, String calle, String numero, double precioNoche, int huespedes) {
         getPropietarioById(id).setVivienda(new Vivienda(nombre, new Direccion(localidad, calle, numero), precioNoche, huespedes));
+        Comms.enviarMensajeTelegram("Se ha creado una vivienda Nueva: "+getPropietarioById(id).getVivienda().toStringTelegram());
+        Comms.enviarConGMailCrearVivienda(getPropietarioById(id).getEmail(),"Creación de vivienda",nombre,localidad,calle,numero,precioNoche,String.valueOf(huespedes));
     }
 
     public void editarVivienda(String id, String nombre, double precionoche, int huespedes) {
@@ -143,8 +148,25 @@ public class FernanByB {
     }
 
     public String generaIdReserva() {
-        int idreserva = (int) (Math.random() * 899999) + 100000;
+        int idreserva;
+        do {
+            idreserva = (int) (Math.random() * 899999) + 100000;
+        }while (!idReservaNoCoincide(idreserva));
         return String.valueOf(idreserva);
+    }
+
+    private boolean idReservaNoCoincide(int idreserva) {
+        String id=String.valueOf(idreserva);
+        boolean noCoincide=true;
+        if (propietario1!=null){
+            if (propietario1.getVivienda().getReserva1()!=null && propietario1.getVivienda().getReserva1().getId().equals(id))noCoincide=false;
+            if (propietario1.getVivienda().getReserva2()!=null && propietario1.getVivienda().getReserva2().getId().equals(id))noCoincide=false;
+        }
+        if (propietario2!=null){
+            if (propietario2.getVivienda().getReserva1()!=null && propietario1.getVivienda().getReserva1().getId().equals(id))noCoincide=false;
+            if (propietario2.getVivienda().getReserva2()!=null && propietario1.getVivienda().getReserva2().getId().equals(id))noCoincide=false;
+        }
+        return noCoincide;
     }
 
     public String login(String user, String pass) {
@@ -152,7 +174,7 @@ public class FernanByB {
         if (usuario2 != null && usuario2.loginCorrecto(user, pass)) return usuario2.getid();
         if (propietario1 != null && propietario1.loginCorrecto(user, pass)) return propietario1.getid();
         if (propietario2 != null && propietario2.loginCorrecto(user, pass)) return propietario2.getid();
-        if (admin != null && admin.loginCorrecto(user, pass)) return admin.getNombre();
+        if (admin != null && admin.loginCorrecto(user, pass)) return admin.getid();
         return "";
     }
 
@@ -174,6 +196,11 @@ public class FernanByB {
     public Propietario getPropietarioById(String id) {
         if (propietario1 != null && propietario1.getid().equals(id)) return propietario1;
         if (propietario2 != null && propietario2.getid().equals(id)) return propietario2;
+        return null;
+    }
+    public Propietario propietarioByVivienda(Vivienda v){
+        if (propietario1!=null && v.getNombre().equals(propietario1.getVivienda().getNombre()))return propietario1;
+        if (propietario2!=null && v.getNombre().equals(propietario2.getVivienda().getNombre()))return propietario2;
         return null;
     }
 
@@ -235,10 +262,11 @@ public class FernanByB {
         return false;
     }
 
-    public void modificausuario(String nombre, String user, String pass, String mail, String id) {
-        if (getAdminById(id) != null) getAdminById(id).modificar(nombre, user, pass, mail);
-        if (getPropietarioById(id) != null) getPropietarioById(id).modificar(nombre, user, pass, mail);
-        if (getUsuarioById(id) != null) getUsuarioById(id).modificar(nombre, user, pass, mail);
+    public void modificausuario(String nombre, String user, String pass, String mail, String id,String token) {
+        if (getAdminById(id) != null) getAdminById(id).modificar(nombre, user, pass, mail,token);
+        if (getPropietarioById(id) != null) getPropietarioById(id).modificar(nombre, user, pass, mail,token);
+        if (getUsuarioById(id) != null) getUsuarioById(id).modificar(nombre, user, pass, mail,token);
+
     }
 
     public boolean bloqueaVivienda(LocalDate fini, LocalDate ffin, Vivienda v) {
@@ -247,6 +275,9 @@ public class FernanByB {
     public void reservaVivienda(LocalDate fini, LocalDate ffin, Vivienda v,String id){
         Reserva r= v.reservar(fini,ffin,generaIdReserva());
         getUsuarioById(id).setReserva(r);
+        Comms.enviarMensajeTelegram(pintaReservaTelegram(r,v));
+        Comms.enviarConGMailNuevaReservaPropietario(propietarioByVivienda(v).getEmail(),"Han reservado tu vivienda",r.getId(),r.getFini().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),r.getFfin().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),getUsuarioById(id).getnombre());
+        Comms.enviarConGMailNuevaReservaUsuario(getUsuarioById(id).getEmail(),"Has realizado una reserva",v.getNombre(),r.getFini().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),r.getFfin().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
     }
 
     public boolean verificado(String id) {
@@ -280,10 +311,43 @@ public class FernanByB {
 
     public String buscaVivienda(LocalDate fini, LocalDate ffin, String localidad) {
         String viviendasCoincidentes = "";
-        if (propietario1.getVivienda().getLocalidad().equals(localidad))
+        if (propietario1!=null && propietario1.getVivienda().getLocalidad().equalsIgnoreCase(localidad))
             viviendasCoincidentes = viviendasCoincidentes + "1";
-        if (propietario2.getVivienda().getLocalidad().equals(localidad))
+        if (propietario2!=null && propietario2.getVivienda().getLocalidad().equalsIgnoreCase(localidad))
             viviendasCoincidentes = viviendasCoincidentes + "2";
         return viviendasCoincidentes;
+    }
+
+    public Propietario getPropietario1() {
+        return propietario1;
+    }
+
+    public Propietario getPropietario2() {
+        return propietario2;
+    }
+
+    public String  pintaReserva(int i) {
+        Propietario p=(i<=2)?propietario1:propietario2;
+        Reserva r=(i%2!=0)?p.getVivienda().getReserva1():p.getVivienda().getReserva2();
+        return (String.format("""
+                ================================
+                Vivienda:%s
+                %s
+                """,p.getVivienda().getNombre(),r));
+    }
+    public String  pintaReservaTelegram(Reserva r,Vivienda v) {
+
+        return (String.format("================================%%0AVivienda:%s%%0A%s",v.getNombre(),r.toStringTelegram()));
+    }
+
+    public String pintaReservaPropietario(int i,Propietario p) {
+        Reserva r;
+        if (i==1)r=p.getVivienda().getReserva1();
+        else r=p.getVivienda().getReserva2();
+        return (String.format("""
+                ================================
+                Vivienda:%s
+                %s
+                """,p.getVivienda().getNombre(),r));
     }
 }

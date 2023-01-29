@@ -49,7 +49,7 @@ public class Usuario {
         }
         return false;
     }
-    public boolean loginCorrecto(String user,String pas){
+    public boolean loginCorrecto(String user,String pass){
         return this.user.equals(user) && this.pass.equals(pass);
 
     }
@@ -69,11 +69,18 @@ public class Usuario {
                 """,this.nombre,this.user,this.DNI,this.email,(this.token==null)?"Si":"No");
     }
 
-    public void modificar(String nombre, String user, String pass, String mail) {
+    public void modificar(String nombre, String user, String pass, String mail,String token) {
         if (!nombre.equals(""))this.nombre=nombre;
         if (!user.equals(""))this.user=user;
         if (!pass.equals(""))this.pass=pass;
-        if (!mail.equals(""))this.email=mail;
+        if (!mail.equals("")){
+            this.email=mail;
+            this.token=token;
+        }
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public boolean tieneReservas() {
@@ -96,9 +103,9 @@ public class Usuario {
 
     public void setReserva(Reserva r) {
         if (reserva1==null)reserva1=r;
-        if (reserva2==null)reserva2=r;
+        else if (reserva2==null)reserva2=r;
     }
     public boolean reservasLlenas(){
-        return reserva1!=null && reserva2!=null;
+        return reserva1!=null  && reserva2!=null;
     }
 }

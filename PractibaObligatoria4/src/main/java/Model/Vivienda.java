@@ -22,6 +22,11 @@ public class Vivienda {
         this.precioNoche = precioNoche;
         this.maxHuespedes = maxHuespedes;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
     public Reserva getReserva1(){
         return reserva1;
     }
@@ -46,15 +51,15 @@ public class Vivienda {
     }
     public Reserva reservar(LocalDate fini,LocalDate ffin,String idreserva) {
         if (reserva1 == null && reserva2 == null){
-            reserva1 = new Reserva(id, fini, ffin);
+            reserva1 = new Reserva(idreserva, fini, ffin);
             return reserva1;
         }
         if (reserva1 == null && DateCalcs.noCoinciden(fini, reserva2.getFini(),ffin,reserva2.getFfin())){
-            reserva1=new Reserva(id,fini,ffin);
+            reserva1=new Reserva(idreserva,fini,ffin);
             return reserva1;
         }
         if (reserva2==null && DateCalcs.noCoinciden(fini, reserva1.getFini(),ffin,reserva1.getFfin())){
-            reserva2=new Reserva(id,fini,ffin);
+            reserva2=new Reserva(idreserva,fini,ffin);
             return reserva2;
         }
         return null;
@@ -83,6 +88,31 @@ public class Vivienda {
     }
     public String getLocalidad(){
         return direccion.getLocalidad();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("""
+                ==============================
+                %s
+                ==============================
+                Dirección
+                ==============================
+                %s
+                ==============================
+                Precio/noche: %.2f
+                Máximo huespedes: %s
+                ==============================
+                """,this.nombre,this.direccion,this.precioNoche,this.maxHuespedes);
+    }
+
+    public String toStringTelegram() {
+        return String.format("==============================%%0A%s%%0A" +
+                "==============================%%0ADirección%%0A" +
+                "==============================%%0A%s%%0A" +
+                "==============================%%0APrecio/noche: %.2f%%0AMáximo huespedes: %s%%0A" +
+                "==============================%%0A"
+                ,this.nombre,this.direccion.toStringTelegram(),this.precioNoche,this.maxHuespedes);
     }
 }
 

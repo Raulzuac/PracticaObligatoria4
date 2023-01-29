@@ -21,6 +21,11 @@ public class Propietario {
         this.pass = pass;
         this.token=token;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
     public boolean verificarPropietario(String token) {
         if (token.equals(this.token)){
             this.token=null;
@@ -72,11 +77,14 @@ public class Propietario {
                 """,this.nombre,this.user,this.DNI,this.email,(this.token==null)?"Si":"No");
     }
 
-    public void modificar(String nombre, String user, String pass, String mail) {
+    public void modificar(String nombre, String user, String pass, String mail,String token) {
         if (!nombre.equals(""))this.nombre=nombre;
         if (!user.equals(""))this.user=user;
         if (!pass.equals(""))this.pass=pass;
-        if (!mail.equals(""))this.email=mail;
+        if (!mail.equals("")){
+            this.email=mail;
+            this.token=token;
+        }
     }
 
 
