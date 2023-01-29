@@ -562,8 +562,8 @@ public class Main {
         if (validaEmail(mail) && validaDni(dni)) {
             String token = generarToken();
             if (fernan.creaUsuario(dni.toUpperCase(), mail, user, pass, nombre, token)) created = true;
-            //enviarToken(token, mail);//quitar
-            //tokenEnviado();//quitar
+            enviarToken(token, mail);
+            tokenEnviado();
         }
         return created;
     }
