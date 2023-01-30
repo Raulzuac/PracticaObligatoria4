@@ -23,9 +23,9 @@ public class Main {
         String opt = "";
         System.out.println("¿Quieres insertar valores por defecto en esta ejecución?(s/n)");
         if (s.nextLine().equalsIgnoreCase("s")) {
-            crearUsuario("12345678F", "zucarraul@gmail.cdom", "Usuario 1", "usuario", "pass", fernan);
-            crearPropietario("12345678G", "zucarraul@gmail.cdom", "Propietario 1", "propietario", "pass", fernan);
-            crearAdmin("12345667E", "zucarraul@gmail.cdom", "Administrador", "admin", "pass", fernan);
+            crearUsuario("12345678F", "zucarraul@gmail.com", "Usuario 1", "usuario", "pass", fernan);
+            crearPropietario("12345678G", "zucarraul@gmail.com", "Propietario 1", "propietario", "pass", fernan);
+            crearAdmin("12345667E", "zucarraul@gmail.com", "Administrador", "admin", "pass", fernan);
             fernan.nuevaVivienda(fernan.getPropietario1().getid(), "Caserio ardan", "Fuensanta", "Real", "23", 59.3, 6);
             fernan.reservaVivienda(LocalDate.now(), LocalDate.now().plusDays(1), fernan.getPropietario1().getVivienda(), fernan.getUsuario1().getid());
         }
@@ -192,7 +192,6 @@ public class Main {
             if ((r = fernan.getUsuarioById(usuarioLogueado).getReservaById(s.nextLine())) == null) {
                 System.out.println("Id incorrecto volviendo al menú de usuario");
             } else {
-                //todo
                 System.out.println("¿Quieres borrar la reserva?(s/n)");
                 if (!s.nextLine().equals("s")) {
                     System.out.println("Cancelando la modificación de reserva");
