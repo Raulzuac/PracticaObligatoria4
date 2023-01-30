@@ -23,9 +23,9 @@ public class Main {
         String opt = "";
         System.out.println("¿Quieres insertar valores por defecto en esta ejecución?(s/n)");
         if (s.nextLine().equalsIgnoreCase("s")) {
-            crearUsuario("12345678F", "correomalaaa@agmail.com", "Usuario 1", "usuario", "pass", fernan);
-            crearPropietario("12345678G", "coerromla@dgmail.com", "Propietario 1", "propietario", "pass", fernan);
-            crearAdmin("12345667E", "cor@ggail.com", "Administrador", "admin", "pass", fernan);
+            crearUsuario("12345678F", "zucarraul@gmail.cdom", "Usuario 1", "usuario", "pass", fernan);
+            crearPropietario("12345678G", "zucarraul@gmail.cdom", "Propietario 1", "propietario", "pass", fernan);
+            crearAdmin("12345667E", "zucarraul@gmail.cdom", "Administrador", "admin", "pass", fernan);
             fernan.nuevaVivienda(fernan.getPropietario1().getid(), "Caserio ardan", "Fuensanta", "Real", "23", 59.3, 6);
             fernan.reservaVivienda(LocalDate.now(), LocalDate.now().plusDays(1), fernan.getPropietario1().getVivienda(), fernan.getUsuario1().getid());
         }
@@ -193,8 +193,8 @@ public class Main {
                 System.out.println("Id incorrecto volviendo al menú de usuario");
             } else {
                 //todo
-                System.out.println("¿Quieres borrar la reserva?");
-                if (!Character.toString(s.nextLine().charAt(0)).equalsIgnoreCase("s")) {
+                System.out.println("¿Quieres borrar la reserva?(s/n)");
+                if (!s.nextLine().equals("s")) {
                     System.out.println("Cancelando la modificación de reserva");
                     continuar();
                 } else {
@@ -202,6 +202,7 @@ public class Main {
                 }
             }
         }
+        continuar();
     }
 
     private static void verReservasUsuario(FernanByB fernan, String usuarioLogueado) {
@@ -551,8 +552,8 @@ public class Main {
         if (validaEmail(mail) && validaDni(dni)) {
             String token = generarToken();
             if (fernan.creaPropietario(dni.toUpperCase(), mail, user, pass, nombre, token)) created = true;
-            //enviarToken(token, mail);quitar
-            //tokenEnviado();quitar
+            enviarToken(token, mail);
+            tokenEnviado();
         }
         return created;
     }
@@ -573,8 +574,8 @@ public class Main {
         if (validaEmail(mail) && validaDni(dni)) {
             String token = generarToken();
             if (fernan.crearAdmin(dni.toUpperCase(), mail, user, pass, nombre, token)) created = true;
-            //enviarToken(token, mail);quitar
-            //tokenEnviado();quitar
+            enviarToken(token, mail);
+            tokenEnviado();
         }
         return created;
     }
@@ -605,7 +606,6 @@ public class Main {
     }
 
     public static void enviarToken(String token, String mail) {
-        Comms.enviarMensajeTelegram("El token para verificar tu usuario es: " + token);
         Comms.enviarConGMail(mail, "Tu token de fernanbyb", token);
     }
 

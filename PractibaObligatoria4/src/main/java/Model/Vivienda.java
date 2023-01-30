@@ -65,22 +65,22 @@ public class Vivienda {
         return null;
     }
     public Reserva getReservaById(String id){
-        if (reserva1.getId().equals(id))return reserva1;
-        if (reserva2.getId().equals(id))return reserva2;
+        if (reserva1!=null && reserva1.getId().equals(id))return reserva1;
+        if (reserva2!=null && reserva2.getId().equals(id))return reserva2;
         return null;
     }
     public boolean borrarReservaById(String id){
-        if (reserva1.getId().equals(id)){
+        if (reserva1!=null && reserva1.getId().equals(id)){
             reserva1=null;
         }
-        if (reserva2.getId().equals(id)){
+        if (reserva2!=null && reserva2.getId().equals(id)){
             reserva2=null;
         }
         return false;
     }
     public boolean hasResrva(String id){
-        if (reserva1.getId().equals(id))return true;
-        if (reserva2.getId().equals(id))return true;
+        if (reserva1!=null && reserva1.getId().equals(id))return true;
+        if (reserva2!=null && reserva2.getId().equals(id))return true;
         return false;
     }
     public boolean reservableEn(LocalDate fini,LocalDate ffin){

@@ -11,10 +11,7 @@ public class FernanByB {
     private Propietario propietario1;
     private Propietario propietario2;
     private Admin admin;
-    private Reserva reserva1;
-    private Reserva reserva2;
-    private Reserva reserva3;
-    private Reserva reserva4;
+
 
     public FernanByB() {
 
@@ -230,22 +227,6 @@ public class FernanByB {
         return usuario2;
     }
 
-    public Reserva getReserva1() {
-        return reserva1;
-    }
-
-    public Reserva getReserva2() {
-        return reserva2;
-    }
-
-    public Reserva getReserva3() {
-        return reserva3;
-    }
-
-    public Reserva getReserva4() {
-        return reserva4;
-    }
-
     public Object getPersonaById(String id) {
         if (usuario1 != null && usuario1.getid().equals(id)) return usuario1;
         if (usuario2 != null && usuario2.getid().equals(id)) return usuario2;
@@ -299,7 +280,7 @@ public class FernanByB {
         Usuario u;
         Vivienda v;
         if (usuario1.getid().equals(idUsuario)) u = usuario1;
-        u = usuario2;
+        else u = usuario2;
         v = getViviendaByReservaId(id);
         if (v == null) return false;
         else {
