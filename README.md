@@ -38,7 +38,7 @@ Al iniciar la aplicación nos preguntará si queremos insertar valores por defec
 
 *Entre paréntesis las credenciales para poder acceder a los perfiles y utilizar sus características*
 
-![](img\0.png)
+![](img/0.png)
 
 Saldrán indicaciones de que se han mandado correos y mensajes de telegram, lo cual significa que todo se ha hecho correctamtente.
 
@@ -48,7 +48,7 @@ Tras esto estaremos en el menú de la aplicación y podremos empezar a utilizarl
 
 Este es el menú de inicio del programa.
 
-![](img\1.png)
+![](img/1.png)
 
 Donde seleccionaremos la acción que queremos realizar, en este caso empezaremos a explicar por los registros, para después pasar al login.
 
@@ -56,11 +56,11 @@ Donde seleccionaremos la acción que queremos realizar, en este caso empezaremos
 
 Todos los usuarios se registran de la misma forma, excepto el administrador, ya que tiene que insertar una contraseña, la contraseña es "f3m".
 
-![](img\1-1.png)
+![](img/1-1.png)
 
 Rellenamos los campos que nos pide, se hace una comprobación de que tanto el DNI como el correo son válidos, y se manda el correo de verificación al gmail del usuario.
 
-![](img\1-2.png)
+![](img/1-2.png)
 
 Esta operación tardará un poco y después ya podremos loguearnos con nuestros usuarios.
 
@@ -68,7 +68,7 @@ Esta operación tardará un poco y después ya podremos loguearnos con nuestros 
 
 El menú de login te pedirá usuario y contraseña para acceder al sistema y entraras como el tipo de usuario que seas.
 
-![](img\1-3.png)
+![](img/1-3.png)
 
 En este punto ya podemos usar las funcionalidades de los distintos usuarios, a partir de este punto yo utilizaré los datos que hemos insertado de base en el sistema, para explicar el funcionamiento de, los menús de los distintos usuarios.
 
@@ -86,19 +86,19 @@ Todos los usuarios tienen la posibilidad de ver y editar sus datos, este menú e
 
 Muestra las viviendas en alquiler
 
-![](img\2-1.png)
+![](img/2-1.png)
 
 #### 2.-Vista de los usuarios del sistema
 
 Muestra los usuarios del sistema
 
-![](img\2-2.png)
+![](img/2-2.png)
 
 #### 3.-Vista de las reservas
 
 Muestra todas las reservas de viviendas del sistema
 
-![](img\2-3.png)
+![](img/2-3.png)
 
 ### 3.-Menú de Propietario
 
@@ -106,25 +106,25 @@ Muestra todas las reservas de viviendas del sistema
 
 Muestra la información de las viviendas del propietario
 
-![](img\3-1.png)
+![](img/3-1.png)
 
 #### 2.Creacion/Edición de viviendas
 
 En este menú se crean y se editan las viviendas.
 
-![](img\3-2.png)
+![](img/3-2.png)
 
 #### 3.-Vista de reservas
 
 Muestra las reservas que corresponden a las viviendas del propietario
 
-![](img\3-3.png)
+![](img/3-3.png)
 
 #### 4.-Establecer periodo de no disponibilidad 
 
 Desde este menú el propietario puede bloquear la vivienda en una fecha, siempre que no hubiera una reserva previa durante esas fechas.
 
-![](img\3-4.png)
+![](img/3-4.png)
 
 ### 4.-Menú de Usuario
 
@@ -132,7 +132,7 @@ Desde este menú el propietario puede bloquear la vivienda en una fecha, siempre
 
 Desde este menú se realiza la búsqueda del alojamiento, primero se insertan las fechas y después la localidad en la que queremos buscar.
 
-![](img\4-1.png)
+![](img/4-1.png)
 
 Después de realizar la reserva, se mandará una notificación al administrador, así como un correo al propietario de la vivienda y al usuario que realiza la reserva
 
@@ -140,10 +140,14 @@ Después de realizar la reserva, se mandará una notificación al administrador,
 
 Muestra las reservas del usuario
 
-![](img\4-2.png)
+![](img/4-2.png)
 
 #### 3.-Modificación de reservas
 
 Desde este menú se pueden modificar las reservas del usuario
 
-![](img\4-3.png)
+![](img/4-3.png)
+
+### 5.-UML
+
+![](img/FernanBnBuml.png)
